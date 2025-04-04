@@ -3,24 +3,16 @@ import { auth } from "../../../auth";
 import CardComponent from "@/components/card";
 import { getAllWorkspaces } from "../../../service/cotegory-service";
 import Link from "next/link";
+import { Star, MoreVertical } from "lucide-react";
 
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-  integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-/>;
+export default async function Todo() {
+  const res = await getAllWorkspaces();
+  const { payload: workspaces } = res;
 
-export default async function Todo({  }) {
+  console.log("workspace ", res);
+  console.log("res ", res);
 
-  const response = await getAllWorkspaces();
-  const workspaces = await response.payload;
-
-  // const resCategories = await getAllBookCategories();
-  // const categories = await resCategories.payload;
-
-// export default async function todo() {
+  // export default async function todo() {
   const session = await auth();
   console.log("session: ", session);
 
@@ -37,35 +29,38 @@ export default async function Todo({  }) {
     { id: 4, name: "Spring Boot", color: "bg-purple-500", bold: false },
   ];
 
+  const favorites = [{ id: 1, name: "HRD Design", color: "red-500" }];
 
   return (
     <>
       <div className="flex h-screen bg-gray-100">
         {/*  */}
 
-        <div className="hidden md:flex flex-col w-80 bg-blue-200 rounded-2xl">
+        <div className="hidden md:flex flex-col w-80 bg-amber-50 rounded-2xl">
           <div className="flex flex-col flex-1 overflow-y-auto">
             <h1 className="font-bold text-5xl text-center py-15">
               Plan<span className="text-watermelon-red">I</span>t{" "}
             </h1>
             <p className=" flex justify-between font-bold px-5">
               Workspace
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-square-plus-icon lucide-square-plus"
-              >
-                <rect width="18" height="18" x="3" y="3" rx="2" />
-                <path d="M8 12h8" />
-                <path d="M12 8v8" />
-              </svg>
+              <button className="text-gray-500 hover:text-black text-xl">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-square-plus-icon lucide-square-plus"
+                >
+                  <rect width="18" height="18" x="3" y="3" rx="2" />
+                  <path d="M8 12h8" />
+                  <path d="M12 8v8" />
+                </svg>
+              </button>
             </p>
 
             <div className="w-full max-w-md mx-auto rounded-lg p-4">
@@ -90,12 +85,67 @@ export default async function Todo({  }) {
                       </span>
                     </div>
                     <button className="text-gray-500 hover:text-black text-xl">
-                      &#x22EE;
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-ellipsis-icon lucide-ellipsis"
+                      >
+                        <circle cx="12" cy="12" r="1" />
+                        <circle cx="19" cy="12" r="1" />
+                        <circle cx="5" cy="12" r="1" />
+                      </svg>
                     </button>
                   </li>
                 ))}
               </ul>
             </div>
+            <div className="w-full p-4 rounded-lg ">
+              {/* Header */}
+              <div className="flex justify-between items-center text-gray-500 font-semibold mb-2">
+                <span>Favorite</span>
+                <Star className="w-5 h-5 text-gray-400" />
+              </div>
+
+              {/* List Items */}
+              {favorites.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex justify-between items-center py-2"
+                >
+                  <div className="flex items-center space-x-2">
+                    <span className={`w-3 h-3 bg-${item.color} rounded-full`} />
+                    <span className="text-gray-700">{item.name}</span>
+                  </div>
+                  <MoreVertical className="w-5 h-5 text-gray-500 cursor-pointer" />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mb-30 px-10">
+            <a
+              href="#"
+              className="flex items-center text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={24}
+                height={24}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M5 11h8v2H5v3l-5-4l5-4zm-1 7h2.708a8 8 0 1 0 0-12H4a9.985 9.985 0 0 1 8-4c5.523 0 10 4.477 10 10s-4.477 10-10 10a9.985 9.985 0 0 1-8-4"
+                />
+              </svg>
+              <span className="font-bold">Logout</span>
+            </a>
           </div>
         </div>
         {/* Main content */}
@@ -103,8 +153,27 @@ export default async function Todo({  }) {
           <div className="flex items-center justify-between h-16  border-b border-gray-200">
             <div className="flex items-center px-4">
               <div className="relative mx-auto text-gray-600 flex">
-                <div className=" mr-20">work space</div>
-                <div>HRD Design</div>
+                <div className="flex">
+                  <div className=" mr-20">Work space</div>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-chevron-right-icon lucide-chevron-right"
+                    >
+                      <path d="m9 18 6-6-6-6" />
+                    </svg>
+                  </div>
+                  <div>HRD Design</div>
+                </div>
+
                 <button
                   type="submit"
                   className="absolute left-0 top-0 mt-3 mr-4"
@@ -157,7 +226,7 @@ export default async function Todo({  }) {
                 </svg>
               </a>
               {/* logout */}
-              <a
+              {/* <a
                 href="#"
                 className="flex items-center text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-300"
               >
@@ -173,7 +242,7 @@ export default async function Todo({  }) {
                   />
                 </svg>
                 <span className="font-bold">Logout</span>
-              </a>
+              </a> */}
             </div>
           </div>
           <div className="flex p-4 justify-between mt-10">
@@ -194,28 +263,20 @@ export default async function Todo({  }) {
             </svg>
           </div>
           {/*  */}
-          {books.map((book) => (
-              <div key={book.id} className="p-1">
-                <div className="relative group px-2 py-2">
-                  <Link href={"/books/${book.id}"}>
-                    <img
-                      src={book?.image}
-                      alt="Card"
-                      className="rounded-lg cursor-pointer"
-                    />
-                  </Link>
+
+          <div className="p-4 grid grid-cols-3 gap-10">
+            {workspaces.map((workspaces) => (
+              <div key={workspaces.name}>
+                <div className=" leading-loose ">
+                  <div className="text-red-400">
+                    <p>Not Started</p>
+                    <hr />
+                  </div>
+                  <CardComponent />
                 </div>
               </div>
             ))}
 
-          <div className="p-4 flex grid-cols-3 gap-10">
-            <div className="w-1/3 leading-loose ">
-              <div className="text-red-400">
-                <p>Not Started</p>
-                <hr  />
-              </div>
-              <CardComponent />
-            </div>
             {/* <div className="bg-amber-100 w-1/3"> <CardComponent/></div>
           <div className="bg-indigo-300 w-1/3"> <CardComponent/></div>  */}
           </div>
